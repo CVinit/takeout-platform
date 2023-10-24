@@ -5,12 +5,16 @@ import com.cvs.constant.StatusConstant;
 import com.cvs.context.BaseContext;
 import com.cvs.dto.EmployeeDTO;
 import com.cvs.dto.EmployeeLoginDTO;
+import com.cvs.dto.EmployeePageQueryDTO;
 import com.cvs.entity.Employee;
 import com.cvs.exception.AccountLockedException;
 import com.cvs.exception.AccountNotFoundException;
 import com.cvs.exception.PasswordErrorException;
 import com.cvs.mapper.EmployeeMapper;
+import com.cvs.result.PageResult;
 import com.cvs.service.EmployeeService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -84,6 +88,15 @@ public class EmployeeServiceImpl implements EmployeeService {
         BaseContext.removeCurrentId();
 
         employeeMapper.insert(employee);
+    }
+
+    @Override
+    public PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO) {
+        //开始分页查询
+        PageHelper.startPage(employeePageQueryDTO.getPage(),employeePageQueryDTO.getPageSize());
+        Page<Employee> page = employeeMapper.pageQuery(employeePageQueryDTO);
+
+        return new PageResult(page.getTotal(),page.getResult());
     }
 
 }
