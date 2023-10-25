@@ -1,7 +1,9 @@
 package com.cvs.mapper;
 
+import com.cvs.annotation.AutoFill;
 import com.cvs.dto.EmployeePageQueryDTO;
 import com.cvs.entity.Employee;
+import com.cvs.enumeration.OperationType;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -23,6 +25,7 @@ public interface EmployeeMapper {
      * @param employee
      */
     @Insert("insert into sky_take_out.employee (name,username,password,phone,sex,id_number,status,create_time,update_time,create_user,update_user) values " + "(#{name},#{username},#{password},#{phone},#{sex},#{idNumber},#{status},#{createTime},#{updateTime},#{createUser},#{updateUser})")
+    @AutoFill(OperationType.INSERT)
     void insert(Employee employee);
 
     /**
@@ -35,6 +38,7 @@ public interface EmployeeMapper {
      * 根据主键动态修改员工属性
      * @param employee
      */
+    @AutoFill(OperationType.UPDATE)
     void update(Employee employee);
 
     /**

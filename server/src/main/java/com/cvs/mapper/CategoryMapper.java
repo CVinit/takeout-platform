@@ -1,5 +1,7 @@
 package com.cvs.mapper;
 
+import com.cvs.annotation.AutoFill;
+import com.cvs.enumeration.OperationType;
 import com.github.pagehelper.Page;
 //import com.cvs.enumeration.OperationType;
 import com.cvs.dto.CategoryPageQueryDTO;
@@ -19,6 +21,7 @@ public interface CategoryMapper {
     @Insert("insert into category(type, name, sort, status, create_time, update_time, create_user, update_user)" +
             " VALUES" +
             " (#{type}, #{name}, #{sort}, #{status}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser})")
+    @AutoFill(OperationType.INSERT)
     void insert(Category category);
 
     /**
@@ -39,6 +42,7 @@ public interface CategoryMapper {
      * 根据id修改分类
      * @param category
      */
+    @AutoFill(OperationType.UPDATE)
     void update(Category category);
 
     /**
