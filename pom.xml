@@ -31,6 +31,7 @@
         <druid>1.2.1</druid>
         <pagehelper>1.3.0</pagehelper>
         <aliyun.sdk.oss>3.10.2</aliyun.sdk.oss>
+        <amazon.sdk.oss>2.16.60</amazon.sdk.oss>
         <knife4j>3.0.2</knife4j>
         <aspectj>1.9.4</aspectj>
         <jjwt>0.9.1</jjwt>
@@ -103,6 +104,14 @@
                 <groupId>com.aliyun.oss</groupId>
                 <artifactId>aliyun-sdk-oss</artifactId>
                 <version>${aliyun.sdk.oss}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>software.amazon.awssdk</groupId>
+                <artifactId>bom</artifactId>
+                <version>${amazon.sdk.oss}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
 
             <dependency>

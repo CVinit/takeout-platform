@@ -1,4 +1,4 @@
-sky:
+cvs:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     host: localhost
@@ -6,3 +6,9 @@ sky:
     database: sky_take_out
     username: root
     password: Zcw1998.+
+  s3oss:
+    endpoint: https://s3.us-west-004.backblazeb2.com
+    access-key-id: 0044c19d7c229a80000000007
+    access-key-secret: K004e9vgWJ3Nynld467CrenYA6q1gEo
+    bucket-name: ColaImg
+    object-path: dishPics/
