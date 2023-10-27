@@ -1,8 +1,12 @@
 package com.cvs.mapper;
 
 import com.cvs.annotation.AutoFill;
+import com.cvs.dto.DishPageQueryDTO;
 import com.cvs.entity.Dish;
 import com.cvs.enumeration.OperationType;
+import com.cvs.vo.DishVO;
+import com.github.pagehelper.Page;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -18,4 +22,21 @@ public interface DishMapper {
     Integer countByCategoryId(Long categoryId);
     @AutoFill(OperationType.INSERT)
     void insert(Dish dish);
+
+    /**
+     * 菜品分页查询
+     * @param dishPageQueryDTO
+     * @return
+     */
+    Page<DishVO> pageQuery(DishPageQueryDTO dishPageQueryDTO);
+
+    @Select("select * from  dish where id = #{id}")
+    Dish getByid(Long id);
+
+    /**
+     * 根据id删除菜品
+     * @param id
+     */
+    @Delete("delete from dish where id = #{id}")
+    void deleteById(Long id);
 }

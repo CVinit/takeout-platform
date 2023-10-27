@@ -1,6 +1,10 @@
 package com.cvs.service;
 
 import com.cvs.dto.DishDTO;
+import com.cvs.dto.DishPageQueryDTO;
+import com.cvs.result.PageResult;
+
+import java.util.List;
 
 public interface DishService {
 
@@ -9,4 +13,17 @@ public interface DishService {
      * @param dishDTO
      */
     public void saveWithFlavor(DishDTO dishDTO);
+
+    /**
+     * 菜品分页查询
+     * @param dishPageQueryDTO
+     * @return
+     */
+    PageResult pageQuery(DishPageQueryDTO dishPageQueryDTO);
+
+    /**
+     * 菜品批量删除
+     * @param ids
+     */
+    void deleteBatch(List<Long> ids);
 }
