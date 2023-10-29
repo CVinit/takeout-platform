@@ -12,3 +12,8 @@ cvs:
     access-key-secret: K004e9vgWJ3Nynld467CrenYA6q1gEo
     bucket-name: ColaImg
     object-path: dishPics/
+  redis:
+    host: 172.24.82.75
+    port: 6379
+    password: Zcw1998.+
+    database: 0
