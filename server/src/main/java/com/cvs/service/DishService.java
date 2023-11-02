@@ -2,6 +2,7 @@ package com.cvs.service;
 
 import com.cvs.dto.DishDTO;
 import com.cvs.dto.DishPageQueryDTO;
+import com.cvs.entity.Dish;
 import com.cvs.result.PageResult;
 import com.cvs.vo.DishVO;
 
@@ -54,4 +55,11 @@ public interface DishService {
      * @return
      */
     List<DishVO> getDishByCategoryId(Long categoryId);
+
+    /**
+     * 条件查询菜品和口味
+     * @param dish
+     * @return
+     */
+    List<DishVO> listWithFlavor(Dish dish);
 }

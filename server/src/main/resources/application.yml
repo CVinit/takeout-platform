@@ -37,3 +37,22 @@ cvs:
     admin-secret-key: itcast
     admin-ttl: 7200000000
     admin-token-name: token
+    user-secret-key: itheima
+    user-token-name: authentication
+    user-ttl: 7200000000
+  s3oss:
+    endpoint: ${cvs.s3oss.endpoint}
+    access-key-id: ${cvs.s3oss.access-key-id}
+    access-key-secret: ${cvs.s3oss.access-key-secret}
+    bucket-name: ${cvs.s3oss.bucket-name}
+    object-path: ${cvs.s3oss.object-path}
+  wechat:
+    appid: ${cvs.wechat.appid}
+    secret: ${cvs.wechat.secret}
+    mchid: ${cvs.wechat.mchid}
+    mchSerialNo: ${cvs.wechat.mchSerialNo}
+    privateKeyFilePath: ${cvs.wechat.privateKeyFilePath}
+    apiV3Key: ${cvs.wechat.apiV3Key}
+    weChatPayCertFilePath: ${cvs.wechat.weChatPayCertFilePath}
+    notifyUrl: ${cvs.wechat.notifyUrl}
+    refundNotifyUrl: ${cvs.wechat.refundNotifyUrl}

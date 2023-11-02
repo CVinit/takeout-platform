@@ -1,6 +1,7 @@
 package com.cvs.config;
 
 import com.cvs.interceptor.JwtTokenAdminInterceptor;
+import com.cvs.interceptor.JwtTokenUserInterceptor;
 import com.cvs.interceptor.ShopStatusInterceptor;
 import com.cvs.json.JacksonObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,8 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     @Autowired
     private JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
     @Autowired
+    private JwtTokenUserInterceptor jwtTokenUserInterceptor;
+    @Autowired
     private ShopStatusInterceptor shopStatusInterceptor;
 
     /**
@@ -43,6 +46,11 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         registry.addInterceptor(jwtTokenAdminInterceptor)
                 .addPathPatterns("/admin/**")
                 .excludePathPatterns("/admin/employee/login");
+        registry.addInterceptor(jwtTokenUserInterceptor)
+                .addPathPatterns("/user/**")
+                .excludePathPatterns("/user/user/login")
+                .excludePathPatterns("/user/shop/status");
+
         registry.addInterceptor(shopStatusInterceptor)
                 .addPathPatterns("/user/order/submit")
                 .addPathPatterns("/user/order/payment")

@@ -3,8 +3,10 @@ package com.cvs.service;
 import com.cvs.annotation.AutoFill;
 import com.cvs.dto.SetmealDTO;
 import com.cvs.dto.SetmealPageQueryDTO;
+import com.cvs.entity.Setmeal;
 import com.cvs.enumeration.OperationType;
 import com.cvs.result.PageResult;
+import com.cvs.vo.DishItemVO;
 import com.cvs.vo.SetmealVO;
 
 import java.util.List;
@@ -48,4 +50,18 @@ public interface SetmealService {
      * @param status
      */
     void startOrStop(Long id, Integer status);
+
+    /**
+     * 条件查询
+     * @param setmeal
+     * @return
+     */
+    List<Setmeal> list(Setmeal setmeal);
+
+    /**
+     * 根据id查询菜品选项
+     * @param id
+     * @return
+     */
+    List<DishItemVO> getDishItemById(Long id);
 }
