@@ -1,6 +1,9 @@
 package com.cvs.service;
 
 import com.cvs.dto.ShoppingCartDTO;
+import com.cvs.entity.ShoppingCart;
+
+import java.util.List;
 
 public interface ShoppingCartService {
 
@@ -9,4 +12,15 @@ public interface ShoppingCartService {
      * @param shoppingCartDTO
      */
     void addShoppingCart(ShoppingCartDTO shoppingCartDTO);
+
+    /**
+     * 查看购物车
+     * @return
+     */
+    List<ShoppingCart> showShoppingCart();
+
+    /**
+     * 清空购物车
+     */
+    void cleanShoppingCart();
 }
