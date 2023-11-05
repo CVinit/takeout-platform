@@ -22,8 +22,7 @@ public class ShopStatusInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         log.info("根据店铺状态拦截用户订单...");
         ValueOperations valueOperations = redisTemplate.opsForValue();
-        String shopStatus = (String) valueOperations.get("SHOP_STATUS");
-        Integer status = Integer.valueOf(shopStatus);
+        Integer status = (Integer) valueOperations.get("SHOP_STATUS");
         if (status.equals(0) && request.getPathInfo().contains("/user/order")) {
             log.error("店铺已关闭，下单请求拦截...");
             return false;
