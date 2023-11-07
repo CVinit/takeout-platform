@@ -56,3 +56,11 @@ cvs:
     weChatPayCertFilePath: ${cvs.wechat.weChatPayCertFilePath}
     notifyUrl: ${cvs.wechat.notifyUrl}
     refundNotifyUrl: ${cvs.wechat.refundNotifyUrl}
+  shop:
+    address: ${cvs.shop.address}
+  map:
+    ak: ${cvs.map.ak}
+    sk: ${cvs.map.sk}
+    api-domain: ${cvs.map.api-domain}
+    locate-api-uri: ${cvs.map.locate-api-uri}
+    direct-api-uri: ${cvs.map.direct-api-uri}

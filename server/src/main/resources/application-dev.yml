@@ -27,3 +27,11 @@ cvs:
     weChatPayCertFilePath: D:\pay\wechatpay_166D96F876F45C7D07CE98952A96EC980368ACFC.pem
     notifyUrl: https://58869fb.r2.cpolar.top/notify/paySuccess
     refundNotifyUrl: https://58869fb.r2.cpolar.top/notify/refundSuccess
+  shop:
+    address: 江苏省无锡市滨湖区雪浪街道东南大学国际校区
+  map:
+    ak: ARGUw1gTH3P8t9j5sQKmzi4WnXOpn3BW
+    sk: Enj1Q7n3j53jg9X83sWScUktZ0L7qCsg
+    api-domain: https://api.map.baidu.com
+    locate-api-uri: /geocoding/v3/?
+    direct-api-uri: /direction/v2/riding?
