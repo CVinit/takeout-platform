@@ -1,9 +1,9 @@
 package com.cvs.service;
 
-import com.cvs.dto.OrdersPaymentDTO;
-import com.cvs.dto.OrdersSubmitDTO;
+import com.cvs.dto.*;
 import com.cvs.result.PageResult;
 import com.cvs.vo.OrderPaymentVO;
+import com.cvs.vo.OrderStatisticsVO;
 import com.cvs.vo.OrderSubmitVO;
 import com.cvs.vo.OrderVO;
 
@@ -50,11 +50,48 @@ public interface OrderService {
      * 取消订单
      * @param id
      */
-    void cancelOrder(Long id);
+    void cancelOrder(Long id, String cancelReason);
 
     /**
      * 再来一单
      * @param id
      */
     void repetition(Long id);
+
+    /**
+     * 管理端订单搜索
+     * @param ordersPageQueryDTO
+     * @return
+     */
+    PageResult pageQuery4Admin(OrdersPageQueryDTO ordersPageQueryDTO);
+
+    /**
+     * 各个状态的订单数量统计
+     * @return
+     */
+    OrderStatisticsVO statistics();
+
+    /**
+     * 接单
+     * @param ordersConfirmDTO
+     */
+    void confirm(OrdersConfirmDTO ordersConfirmDTO);
+
+    /**
+     * 拒单
+     * @param ordersRejectionDTO
+     */
+    void rejection(OrdersRejectionDTO ordersRejectionDTO);
+
+    /**
+     * 派送订单
+     * @param id
+     */
+    void delivery(Long id);
+
+    /**
+     * 完成订单
+     * @param id
+     */
+    void complete(Long id);
 }

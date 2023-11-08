@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.security.NoSuchAlgorithmException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -21,89 +20,48 @@ public class MapUtil {
     @Autowired
     private MapProperties mapProperties;
 
-    /*public void getSn() throws Exception {
-
-
-        Map params = new LinkedHashMap<String, String>();
-        params.put("address", "北京市海淀区上地十街10号");
-        params.put("output", "json");
-        params.put("ak", ak);
-        params.put("callback", "showLocation");
-
-        params.put("sn", caculateSn());
-
-        requestGetSN(apiUrl, params);
-    }*/
-
-    /**
-     * 选择了ak，使用SN校验：
-     * 根据您选择的AK已为您生成调用代码
-     * 检测您当前的AK设置了sn检验，本示例中已为您生成sn计算代码
-     * @param
-     * @param
-     * @throws Exception
-     */
-    /*public void requestGetSN(String strUrl, Map<String, String> param) throws Exception {
-        if (strUrl == null || strUrl.length() <= 0 || param == null || param.size() <= 0) {
-            return;
-        }
-
-        StringBuffer queryString = new StringBuffer();
-        queryString.append(strUrl);
-        for (Map.Entry<?, ?> pair : param.entrySet()) {
-            queryString.append(pair.getKey() + "=");
-            //    第一种方式使用的 jdk 自带的转码方式  第二种方式使用的 spring 的转码方法 两种均可
-            //    queryString.append(URLEncoder.encode((String) pair.getValue(), "UTF-8").replace("+", "%20") + "&");
-            queryString.append(UriUtils.encode((String) pair.getValue(), "UTF-8") + "&");
-        }
-
-        if (queryString.length() > 0) {
-            queryString.deleteCharAt(queryString.length() - 1);
-        }
-
-        java.net.URL url = new URL(queryString.toString());
-        System.out.println(queryString.toString());
-        URLConnection httpConnection = (HttpURLConnection) url.openConnection();
-        httpConnection.connect();
-
-        InputStreamReader isr = new InputStreamReader(httpConnection.getInputStream());
-        BufferedReader reader = new BufferedReader(isr);
-        StringBuffer buffer = new StringBuffer();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            buffer.append(line);
-        }
-        reader.close();
-        isr.close();
-        System.out.println("SN: " + buffer.toString());
-    }*/
-
     public String getLocation(String address) {
         Map<String, String> paramsMap = new LinkedHashMap<>();
         paramsMap.put("address", address);
         paramsMap.put("output", "json");
         paramsMap.put("ak", mapProperties.getAk());
-//        paramsMap.put("callback", "showLocation");
 
-        String uri = null;
+        String uri = "";
         try {
             uri = getUri(paramsMap, mapProperties.getLocateApiUri());
-        } catch (Exception e) {
-            throw new MapException("地址信息处理错误" + e);
-        }
-
-//        uri = URLEncoder.encode(uri, "UTF-8");
-
-        if (mapProperties.getApiDomain() == null || mapProperties.getApiDomain().length() <= 0 ) {
-            throw new MapException("apiDomain错误！");
+        } catch (UnsupportedEncodingException e) {
+            log.error("地址信息编码处理错误");
+            throw new MapException("地址信息编码处理错误，请联系管理员");
         }
 
         String url = mapProperties.getApiDomain() + uri;
-//        url = URLEncoder.encode(url,"UTF-8");
 
         String response = HttpClientUtil.doGet(url, null);
 
         JSONObject jsonObject = JSONObject.parseObject(response);
+
+        Integer status = jsonObject.getInteger("status");
+        if (!status.equals(0)) {
+            if (status.equals(1)) {
+                log.error("api服务器内部错误");
+            } else if (status.equals(2)) {
+                log.error("请求参数非法");
+            } else if (status.equals(3)) {
+                log.error("权限校验失败");
+            } else if (status.equals(4)) {
+                log.error("配额校验失败，请检查当日配额是否充足");
+            } else if (status.equals(5)) {
+                log.error("ak不存在或者非法，未传入ak参数或ak已被删除");
+            } else if (status.equals(101)) {
+                log.error("AK参数不存在");
+            } else if (status.equals(102)) {
+                log.error("不通过白名单或者安全码不对");
+            } else if (status.equals(240)) {
+                log.error("APP 服务被禁用，请进入API控制台为AK勾选对应服务");
+            }
+            throw new MapException("api响应异常");
+        }
+
         jsonObject = jsonObject.getJSONObject("result").getJSONObject("location");
 
         String res = jsonObject.getString("lat") + "," + jsonObject.getString("lng");
@@ -112,60 +70,67 @@ public class MapUtil {
 
     }
 
-    public Long getDistance(String origin,String destination){
+    public Long getDistance(String origin, String destination) {
+
+        Map<String, String> paramsMap = new LinkedHashMap<>();
+        paramsMap.put("origin", origin);
+        paramsMap.put("destination", destination);
+        paramsMap.put("riding_type", "1"); //电动车骑行
+        paramsMap.put("ak", mapProperties.getAk());
+        String currentTimestamp = String.valueOf(System.currentTimeMillis());
+        paramsMap.put("timestamp", currentTimestamp);
+
+        String uri = null;
         try {
+            uri = getUri(paramsMap, mapProperties.getDirectApiUri());
+        } catch (UnsupportedEncodingException e) {
+            log.error("地址信息编码处理错误");
+            throw new MapException("地址信息编码处理错误，请联系管理员");
+        }
 
-            Map<String, String> paramsMap = new LinkedHashMap<>();
-            paramsMap.put("origin", origin);
-            paramsMap.put("destination", destination);
-            paramsMap.put("riding_type","1"); //电动车骑行
-            paramsMap.put("ak", mapProperties.getAk());
-            String currentTimestamp =  String.valueOf(System.currentTimeMillis());
-            paramsMap.put("timestamp", currentTimestamp);
-
-            String uri = getUri(paramsMap, mapProperties.getDirectApiUri());
-
-            String url = mapProperties.getApiDomain() + uri;
+        String url = mapProperties.getApiDomain() + uri;
 //            url = URLEncoder.encode(url,"UTF-8");
 
-            String response = HttpClientUtil.doGet(url, null);
+        String response = HttpClientUtil.doGet(url, null);
 
-            JSONObject jsonObject = JSONObject.parseObject(response);
-            JSONArray jsonArray = jsonObject.getJSONObject("result").getJSONArray("routes");
-            if (jsonArray == null ){
-                throw new MapException("无配送路线");
+        JSONObject jsonObject = JSONObject.parseObject(response);
+        Integer status = jsonObject.getInteger("status");
+        if (!status.equals(0)) {
+            if (status.equals(1)) {
+                log.error("api服务器内部错误");
+            } else if (status.equals(2)) {
+                log.error("请求参数非法");
+            } else if (status.equals(7)) {
+                log.error("无返回结果");
+            }else if (status.equals(2001)) {
+                log.error("无骑行路线");
             }
-            Long res = 0L;
-            for (int i = 0;i < jsonArray.size();i++){
-                JSONObject json = jsonArray.getJSONObject(i);
-                Long distance = json.getLong("distance");
-                res = res > distance ? res : distance;
-            }
-            return res;
-
-
-        } catch (Exception e) {
-            throw new MapException("获取位置信息错误：" + e.toString());
+            throw new MapException("api响应异常");
         }
+        JSONArray jsonArray = jsonObject.getJSONObject("result").getJSONArray("routes");
+        if (jsonArray == null || jsonArray.size() <= 0) {
+            throw new MapException("无可配送路线，无法为您配送订单");
+        }
+        Long res = 0L;
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JSONObject json = jsonArray.getJSONObject(i);
+            Long distance = json.getLong("distance");
+            res = res > distance ? res : distance;
+        }
+        return res;
+
     }
 
-    private String getUri(Map<String, String> paramsMap, String apiUri) throws UnsupportedEncodingException,
-            NoSuchAlgorithmException {
+    private String getUri(Map<String, String> paramsMap, String apiUri) throws UnsupportedEncodingException {
 
         // 计算sn跟参数对出现顺序有关，get请求请使用LinkedHashMap保存<key,value>，该方法根据key的插入顺序排序；post请使用TreeMap保存<key,value>，该方法会自动将key按照字母a-z顺序排序。
         // 所以get请求可自定义参数顺序（sn参数必须在最后）发送请求，但是post请求必须按照字母a-z顺序填充body（sn参数必须在最后）。
         // 以get请求为例：http://api.map.baidu.com/geocoder/v2/?address=百度大厦&output=json&ak=yourak，paramsMap中先放入address，再放output，然后放ak，放入顺序必须跟get请求中对应参数的出现顺序保持一致。
-//        Map paramsMap = new LinkedHashMap<String, String>();
-//        paramsMap.put("address", "北京市海淀区上地十街10号");
-//        paramsMap.put("output", "json");
-//        paramsMap.put("ak", ak);
-//        paramsMap.put("callback", "showLocation");
-
 
         // 调用下面的toQueryString方法，对LinkedHashMap内所有value作utf8编码，拼接返回结果address=%E7%99%BE%E5%BA%A6%E5%A4%A7%E5%8E%A6&output=json&ak=yourak
         String paramsStr = toQueryString(paramsMap);
 
-        if (apiUri == null || apiUri.length() <= 0){
+        if (apiUri == null || apiUri.length() <= 0) {
             throw new MapException("apiUri错误！");
         }
         // 对paramsStr前面拼接上/geocoder/v3/?，后面直接拼接yoursk得到/geocoder/v3/?address=%E7%99%BE%E5%BA%A6%E5%A4%A7%E5%8E%A6&output=json&ak=yourakyoursk
