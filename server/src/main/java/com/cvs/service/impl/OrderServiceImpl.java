@@ -1,5 +1,6 @@
 package com.cvs.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.cvs.constant.MessageConstant;
 import com.cvs.context.BaseContext;
@@ -19,6 +20,7 @@ import com.cvs.vo.OrderPaymentVO;
 import com.cvs.vo.OrderStatisticsVO;
 import com.cvs.vo.OrderSubmitVO;
 import com.cvs.vo.OrderVO;
+import com.cvs.websocket.WebSocketServer;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.BeanUtils;
@@ -31,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -53,6 +56,8 @@ public class OrderServiceImpl implements OrderService {
     private ShopAddressProperties shopAddressProperties;
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private WebSocketServer webSocketServer;
     /**
      * 用户下单
      * @param ordersSubmitDTO
@@ -194,6 +199,15 @@ public class OrderServiceImpl implements OrderService {
                 .build();
 
         orderMapper.update(orders);
+
+        //通过websocket向客户端推送消息
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("type",1);
+        map.put("orderId",ordersDB.getId());
+        map.put("content","订单号：" + outTradeNo);
+
+        String jsonString = JSON.toJSONString(map);
+        webSocketServer.sendToAllClient(jsonString);
     }
 
     /**
