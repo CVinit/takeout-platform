@@ -3,6 +3,7 @@ package com.cvs.controller.admin;
 import com.cvs.result.Result;
 import com.cvs.service.ReportService;
 import com.cvs.vo.TurnoverReportVO;
+import com.cvs.vo.UserReportVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -41,5 +42,22 @@ public class ReportController {
         log.info("营业额数据统计：{}-{}",begin,end);
         TurnoverReportVO turnoverReportVO = reportService.getTurnoverStatistics(begin,end);
         return Result.success(turnoverReportVO);
+    }
+
+    /**
+     * 用户统计
+     * @param begin
+     * @param end
+     * @return
+     */
+    @GetMapping("/userStatistics")
+    @ApiOperation("用户统计接口")
+    public Result<UserReportVO> userStatistics(
+            @DateTimeFormat(pattern = "yyyy-MM-dd")
+            LocalDate begin,
+            @DateTimeFormat(pattern = "yyyy-MM-dd")
+            LocalDate end){
+        UserReportVO userReportVO = reportService.getUserStatistics(begin,end);
+        return Result.success(userReportVO);
     }
 }
