@@ -6,7 +6,11 @@ import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Mapper
@@ -51,4 +55,7 @@ public interface OrderMapper {
 
     @Select("select * from orders where status = #{status} and order_time < #{time}")
     List<Orders> getByStatusAndOrderTimeLT(Integer status, LocalDateTime time);
+
+    @Select("select sum(amount) from orders where status = #{status} and datediff(order_time,#{begin}) = 0")
+    BigDecimal getSumAmountByStatusAndOrderTime(Integer status, LocalDate begin);
 }
