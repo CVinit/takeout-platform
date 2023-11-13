@@ -64,3 +64,4 @@ cvs:
     api-domain: ${cvs.map.api-domain}
     locate-api-uri: ${cvs.map.locate-api-uri}
     direct-api-uri: ${cvs.map.direct-api-uri}
+  close-time: 0 0 2 * * ?

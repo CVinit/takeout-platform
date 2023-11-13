@@ -16,7 +16,7 @@ public class OrderTask {
     @Autowired
     private OrderMapper orderMapper;
 
-    @Scheduled(cron = "0 * * * * ?")
+//    @Scheduled(cron = "0 * * * * ?") 改用延迟队列实现
 //    @Scheduled(cron = "0/5 * * * * ?")
     public void processTimeoutOrder(){
         log.info("定时处理超时订单：{}", LocalDateTime.now());
@@ -31,7 +31,7 @@ public class OrderTask {
         }
     }
 
-    @Scheduled(cron = "0 0 1 * * ?")
+    @Scheduled(cron = "${cvs.close-time: 0 0 1 * * ?}")
 //    @Scheduled(cron = "0/5 * * * * ?")
     public void processDeliveryOrder(){
         log.info("定时处理一直处于派送中的订单：{}", LocalDateTime.now());

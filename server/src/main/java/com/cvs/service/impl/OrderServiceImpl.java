@@ -4,10 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.cvs.constant.MessageConstant;
 import com.cvs.context.BaseContext;
+import com.cvs.delayqueue.OrderDelayQueue;
+import com.cvs.delayqueue.OrdersInDelay;
 import com.cvs.dto.*;
 import com.cvs.entity.*;
 import com.cvs.exception.AddressBookBusinessException;
-import com.cvs.exception.MapException;
 import com.cvs.exception.OrderBusinessException;
 import com.cvs.exception.ShoppingCartBusinessException;
 import com.cvs.mapper.*;
@@ -23,6 +24,7 @@ import com.cvs.vo.OrderVO;
 import com.cvs.websocket.WebSocketServer;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -32,11 +34,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.DelayQueue;
 
 @Service
+@Slf4j
 public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderMapper orderMapper;
@@ -138,6 +143,13 @@ public class OrderServiceImpl implements OrderService {
                 .orderNumber(orders.getNumber())
                 .orderAmount(orders.getAmount())
                 .build();
+
+        //6. 向OrderDelayQueue中添加此订单
+        OrdersInDelay ordersInDelay = new OrdersInDelay();
+        ordersInDelay.setId(orders.getId());
+        ordersInDelay.setTime(orders.getOrderTime().plusMinutes(1).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+        OrderDelayQueue.getInstance().add(ordersInDelay);
+        log.info("向延迟队列中添加订单：{}",orders.getId());
 
         return orderSubmitVO;
     }

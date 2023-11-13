@@ -35,3 +35,7 @@ cvs:
     api-domain: https://api.map.baidu.com
     locate-api-uri: /geocoding/v3/?
     direct-api-uri: /direction/v2/riding?
+  closetime:
+    hour: 1
+    minute: 30
+    second: 0
