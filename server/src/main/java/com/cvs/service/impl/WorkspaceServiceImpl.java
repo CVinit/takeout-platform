@@ -70,6 +70,8 @@ public class WorkspaceServiceImpl implements WorkspaceService {
             orderCompletionRate = validOrderCount.doubleValue() / totalOrderCount;
             //平均客单价
             unitPrice = turnover / validOrderCount;
+            String format = String.format("%.2f", unitPrice);
+            unitPrice = Double.parseDouble(format);
         }
 
         //新增用户数

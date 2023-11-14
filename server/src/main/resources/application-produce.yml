@@ -1,0 +1,36 @@
+cvs:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    host: localhost
+    port: 3306
+    database: takeout
+    username: takeout
+    password: 3ZcXGCdNkzerNmSN
+  s3oss:
+    endpoint: https://s3.us-west-004.backblazeb2.com
+    access-key-id: 0044c19d7c229a80000000007
+    access-key-secret: K004e9vgWJ3Nynld467CrenYA6q1gEo
+    bucket-name: ColaImg
+    object-path: dishPics/
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 5
+  wechat:
+    appid: wxd1163d6944789302
+    secret: 1a67ef878689adfa35acf093b1170b74
+    mchid: 1561414331
+    mchSerialNo: 4B3B3DC35414AD50B1B755BAF8DE9CC7CF407606
+    privateKeyFilePath: D:\pay\apiclient_key.pem
+    apiV3Key: CZBK51236435wxpay435434323FFDuv3
+    weChatPayCertFilePath: D:\pay\wechatpay_166D96F876F45C7D07CE98952A96EC980368ACFC.pem
+    notifyUrl: https://58869fb.r2.cpolar.top/notify/paySuccess
+    refundNotifyUrl: https://58869fb.r2.cpolar.top/notify/refundSuccess
+  shop:
+    address: 江苏省无锡市滨湖区雪浪街道东南大学国际校区
+  map:
+    ak: ARGUw1gTH3P8t9j5sQKmzi4WnXOpn3BW
+    sk: Enj1Q7n3j53jg9X83sWScUktZ0L7qCsg
+    api-domain: https://api.map.baidu.com
+    locate-api-uri: /geocoding/v3/?
+    direct-api-uri: /direction/v2/riding?

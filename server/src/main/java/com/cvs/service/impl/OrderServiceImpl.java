@@ -148,7 +148,7 @@ public class OrderServiceImpl implements OrderService {
         OrdersInDelay ordersInDelay = new OrdersInDelay();
         ordersInDelay.setId(orders.getId());
         ordersInDelay.setTime(orders.getOrderTime().plusMinutes(1).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
-        OrderDelayQueue.getInstance().add(ordersInDelay);
+        OrderDelayQueue.getInstance().offer(ordersInDelay);
         log.info("向延迟队列中添加订单：{}",orders.getId());
 
         return orderSubmitVO;
