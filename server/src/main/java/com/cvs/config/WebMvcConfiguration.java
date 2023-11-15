@@ -53,8 +53,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
         registry.addInterceptor(shopStatusInterceptor)
                 .addPathPatterns("/user/order/submit")
-                .addPathPatterns("/user/order/payment")
-                .addPathPatterns("/user/order/repetition/**");
+                .addPathPatterns("/user/order/payment");
     }
 
     /**

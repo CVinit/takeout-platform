@@ -1,5 +1,6 @@
 package com.cvs.interceptor;
 
+import com.cvs.exception.OrderBusinessException;
 import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,9 @@ public class ShopStatusInterceptor implements HandlerInterceptor {
         log.info("根据店铺状态拦截用户订单...");
         ValueOperations valueOperations = redisTemplate.opsForValue();
         Integer status = (Integer) valueOperations.get("SHOP_STATUS");
-        if (status.equals(0) && request.getPathInfo().contains("/user/order")) {
+        if (status.equals(0) && request.getRequestURI().contains("/user/order")) {
             log.error("店铺已关闭，下单请求拦截...");
-            return false;
+            throw new OrderBusinessException("店铺已打烊，无法下单或付款！");
         }
         return true;
     }
