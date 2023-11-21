@@ -105,7 +105,7 @@ public class ReportServiceImpl implements ReportService {
             totalUser = totalUser == null ? new BigInteger(new byte[]{0}) : totalUser;
             dateList.add(begin);
             totalUserList.add(totalUser);
-            newUserList.add(totalUser.subtract(totalUserList.get(totalUserList.size() - 1)));
+            newUserList.add(totalUser.subtract(totalUserList.get(totalUserList.size() - 2)));
         }
 
         return UserReportVO.builder()
