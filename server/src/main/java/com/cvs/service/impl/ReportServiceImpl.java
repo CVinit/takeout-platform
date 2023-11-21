@@ -94,18 +94,18 @@ public class ReportServiceImpl implements ReportService {
 
         dateList.add(begin);
 
-        BigInteger totalUser = userMapper.getSumUserByDate(begin);
-        totalUser = totalUser == null ? new BigInteger(new byte[]{0}) : totalUser;
-        totalUserList.add(totalUser);
-        newUserList.add(totalUser);
+        BigInteger newUser = userMapper.getSumUserByDate(begin);
+        newUser = newUser == null ? new BigInteger(new byte[]{0}) : newUser;
+        totalUserList.add(newUser);
+        newUserList.add(newUser);
 
         while (!begin.equals(end)){
             begin = begin.plusDays(1l);
-            totalUser = userMapper.getSumUserByDate(begin);
-            totalUser = totalUser == null ? new BigInteger(new byte[]{0}) : totalUser;
+            newUser = userMapper.getSumUserByDate(begin);
+            newUser = newUser == null ? new BigInteger(new byte[]{0}) : newUser;
             dateList.add(begin);
-            totalUserList.add(totalUser);
-            newUserList.add(totalUser.subtract(totalUserList.get(totalUserList.size() - 2)));
+            newUserList.add(newUser);
+            totalUserList.add(newUser.add(totalUserList.get(totalUserList.size()-1)));
         }
 
         return UserReportVO.builder()
